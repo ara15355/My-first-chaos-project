@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<title>Chaos of Dutch - Emoji Rain 💥🌧️</title>
+<style>
+  body {
+    margin: 0;
+    background: black;
+    overflow: hidden;
+    color: white;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    height: 100vh;
+    position: relative;
+  }
+  h1 {
+    margin-top: 20px;
+    font-size: 3em;
+  }
+  #explosionBtn {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 10px;
+    background: #ff0000;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    z-index: 10;
+    position: relative;
+  }
+  #explosionBtn:hover {
+    background: #ff5500;
+  }
+  .emoji {
+    position: fixed;
+    font-size: 24px;
+    user-select: none;
+    pointer-events: none;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+  }
+  @keyframes fall {
+    0% {
+      transform: translateY(-50px);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>CHAOS OF DUTCH 💥</h1>
+<p>Klik op de knop voor een explosie en emoji regen! 🎉🌧️</p>
+<button id="explosionBtn">EXPLOSIE!</button>
+
+<audio id="explosionSound" src="https://www.soundjay.com/explosion/sounds/explosion-01.mp3"></audio>
+
+<script>
+  const btn = document.getElementById('explosionBtn');
+  const explosionSound = document.getElementById('explosionSound');
+
+  // Emoji die gaan regenen
+  const emojis = ['💥', '🔥', '🌧️', '😂', '💣', '⚡', '🎉', '🚀', '💫', '😎'];
+
+  // Functie om een emoji te laten vallen
+  function createEmoji() {
+    const emoji = document.createElement('div');
+    emoji.classList.add('emoji');
+    emoji.style.left = Math.random() * window.innerWidth + 'px';
+    emoji.style.fontSize = (16 + Math.random() * 30) + 'px';
+    emoji.style.animationDuration = (3 + Math.random() * 4) + 's';
+    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    document.body.appendChild(emoji);
+
+    emoji.addEventListener('animationend', () => {
+      emoji.remove();
+    });
+  }
+
+  // Maak continu emoji's vallen voor 3 seconden na klik
+  function startEmojiRain(duration = 4000) {
+    const interval = setInterval(createEmoji, 100);
+    setTimeout(() => clearInterval(interval), duration);
+  }
+
+  btn.addEventListener('click', () => {
+    explosionSound.currentTime = 0;
+    explosionSound.play();
+
+    // Rode flits (explosie effect)
+    const explosionDiv = document.createElement('div');
+    explosionDiv.style.position = 'fixed';
+    explosionDiv.style.top = 0;
+    explosionDiv.style.left = 0;
+    explosionDiv.style.width = '100vw';
+    explosionDiv.style.height = '100vh';
+    explosionDiv.style.backgroundColor = 'red';
+    explosionDiv.style.opacity = '0.8';
+    explosionDiv.style.zIndex = 9999;
+    document.body.appendChild(explosionDiv);
+
+    setTimeout(() => {
+      explosionDiv.style.transition = 'opacity 0.5s ease';
+      explosionDiv.style.opacity = 0;
+    }, 200);
+
+    setTimeout(() => {
+      explosionDiv.remove();
+    }, 700);
+
+    // Start emoji regen
+    startEmojiRain();
+  });
+</script>
+
+</body>
+</html>
